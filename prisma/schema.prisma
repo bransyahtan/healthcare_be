@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ArticleStatus {
+  draft
+  published
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+
+  name          String
+  email         String    @unique
+  username      String    @unique
+  password      String
+  dateBirth     DateTime?
+  placeBirth    String?
+  role          Int       // 1 admin, 2 doctor, 3 author
+  photoProfile  String?
+  phoneNumber   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  // relations
+  appointments  Appointment[] @relation("AppointmentDoctor")
+  articles      Article[]     @relation("AuthorArticles")
+}
+
+model Appointment {
+  id            Int       @id @default(autoincrement())
+  patientName   String
+  appointmentAt DateTime
+  doctorId      Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  doctor        User      @relation("AppointmentDoctor", fields: [doctorId], references: [id])
+}
+
+model HospitalService {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model HospitalData {
+  id             Int                    @id @default(autoincrement())
+  hospitalName   String
+  longitude      Float?
+  latitude       Float?
+  address        String?
+  phoneNumber    String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  deletedAt      DateTime?
+
+  // relations
+  hospitalFacilities     HospitalFacility[]
+  hospitalSpecializations HospitalSpecialization[]
+  specializations        Specialization[]
+}
+
+model Facility {
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  hospitalFacilities HospitalFacility[]
+}
+
+model Specialization {
+  id         Int       @id @default(autoincrement())
+  hospitalId Int?
+  name       String
+  slug       String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  hospital   HospitalData? @relation(fields: [hospitalId], references: [id])
+  hospitalSpecializations HospitalSpecialization[]
+}
+
+model HospitalFacility {
+  id         Int       @id @default(autoincrement())
+  hospitalId Int
+  facilityId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  hospital   HospitalData @relation(fields: [hospitalId], references: [id])
+  facility   Facility     @relation(fields: [facilityId], references: [id])
+
+  @@unique([hospitalId, facilityId])
+}
+
+model HospitalSpecialization {
+  id               Int       @id @default(autoincrement())
+  hospitalId       Int
+  specializationId Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  deletedAt        DateTime?
+
+  hospital         HospitalData   @relation(fields: [hospitalId], references: [id])
+  specialization   Specialization @relation(fields: [specializationId], references: [id])
+
+  @@unique([hospitalId, specializationId])
+}
+
+model ArticleCategory {
+  id        Int       @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  articles  Article[]
+}
+
+model Article {
+  id          Int            @id @default(autoincrement())
+  categoryId  Int
+  title       String
+  slug        String         @unique
+  bannerPhoto String?
+  publishedAt DateTime?
+  status      ArticleStatus
+  content     String
+  authorId    Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  deletedAt   DateTime?
+
+  category    ArticleCategory @relation(fields: [categoryId], references: [id])
+  author      User            @relation("AuthorArticles", fields: [authorId], references: [id])
+}
