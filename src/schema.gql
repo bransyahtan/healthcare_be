@@ -9,6 +9,7 @@ scalar DateTime
 
 type Query {
   users: [UserEntity!]!
+  usersPaginated(page: Int, pageSize: Int): UsersPaginated!
 }
 
 type UserEntity {
@@ -24,4 +25,11 @@ type UserEntity {
   role: Int!
   updatedAt: DateTime!
   username: String!
+}
+
+type UsersPaginated {
+  items: [UserEntity!]!
+  page: Int!
+  pageSize: Int!
+  total: Int!
 }

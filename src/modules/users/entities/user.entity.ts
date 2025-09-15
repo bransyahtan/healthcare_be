@@ -14,8 +14,6 @@ export class UserEntity {
   @Field()
   username: string;
 
-  // Jangan expose password ke GraphQL
-
   @Field({ nullable: true })
   dateBirth?: Date | null;
 
@@ -39,4 +37,19 @@ export class UserEntity {
 
   @Field({ nullable: true })
   deletedAt?: Date | null;
+}
+
+@ObjectType()
+export class UsersPaginated {
+  @Field(() => [UserEntity])
+  items: UserEntity[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  pageSize: number;
 }
