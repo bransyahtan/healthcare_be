@@ -2,14 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ArticleEntity {
+  authorId: Int!
+  bannerPhoto: String
+  categoryId: Int!
+  content: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  publishedAt: DateTime
+  slug: String!
+  status: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type ArticlesPaginated {
+  items: [ArticleEntity!]!
+  page: Int!
+  pageSize: Int!
+  total: Int!
+}
+
+type ArticlesPaginatedResponse {
+  data: ArticlesPaginated!
+  message: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
 type Query {
-  users: [UserEntity!]!
-  usersPaginated(page: Int, pageSize: Int): UsersPaginated!
+  articlesPaginated(page: Int, pageSize: Int): ArticlesPaginatedResponse!
+  users: UsersResponse!
+  usersPaginated(page: Int, pageSize: Int): UsersPaginatedResponse!
 }
 
 type UserEntity {
@@ -32,4 +60,14 @@ type UsersPaginated {
   page: Int!
   pageSize: Int!
   total: Int!
+}
+
+type UsersPaginatedResponse {
+  data: UsersPaginated!
+  message: String!
+}
+
+type UsersResponse {
+  items: [UserEntity!]!
+  message: String!
 }

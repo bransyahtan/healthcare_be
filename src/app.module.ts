@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { join } from "path";
+import { ArticlesModule } from "./modules/articles/articles.module";
 import { UsersModule } from "./modules/users/users.module";
 import { PrismaModule } from "./prisma/prisma.module";
 
@@ -15,6 +16,7 @@ import { PrismaModule } from "./prisma/prisma.module";
     }),
     PrismaModule,
     UsersModule,
+    ArticlesModule,
   ],
 })
 export class AppModule {}

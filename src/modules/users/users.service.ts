@@ -7,8 +7,8 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
+      where: { deletedAt: null },
       orderBy: { createdAt: "desc" },
-      // Jangan pernah select password
       select: {
         id: true,
         name: true,
@@ -30,6 +30,7 @@ export class UsersService {
     const skip = (page - 1) * pageSize;
     const [items, total] = await Promise.all([
       this.prisma.user.findMany({
+        where: { deletedAt: null },
         skip,
         take: pageSize,
         orderBy: { createdAt: "desc" },
@@ -48,7 +49,7 @@ export class UsersService {
           deletedAt: true,
         },
       }),
-      this.prisma.user.count(),
+      this.prisma.user.count({ where: { deletedAt: null } }),
     ]);
 
     return { items, total, page, pageSize };

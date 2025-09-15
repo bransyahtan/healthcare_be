@@ -53,3 +53,21 @@ export class UsersPaginated {
   @Field(() => Int)
   pageSize: number;
 }
+
+@ObjectType()
+export class UsersResponse {
+  @Field()
+  message: string;
+
+  @Field(() => [UserEntity])
+  items: UserEntity[];
+}
+
+@ObjectType()
+export class UsersPaginatedResponse {
+  @Field()
+  message: string;
+
+  @Field(() => UsersPaginated)
+  data: UsersPaginated;
+}
