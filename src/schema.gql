@@ -29,15 +29,47 @@ type ArticlesPaginatedResponse {
   message: String!
 }
 
+input CreateUserInput {
+  dateBirth: DateTime
+  email: String!
+  name: String!
+  password: String!
+  phoneNumber: String
+  photoProfile: String
+  placeBirth: String
+  role: Int!
+  username: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): UserResponse!
+  deleteUser(id: Int!): UserResponse!
+  updateUser(updateUserInput: UpdateUserInput!): UserResponse!
+}
+
 type Query {
   articlesPaginated(page: Int, pageSize: Int): ArticlesPaginatedResponse!
+  user(id: Int!): UserResponse!
   users: UsersResponse!
   usersPaginated(page: Int, pageSize: Int): UsersPaginatedResponse!
+}
+
+input UpdateUserInput {
+  dateBirth: DateTime
+  email: String
+  id: Int!
+  name: String
+  password: String
+  phoneNumber: String
+  photoProfile: String
+  placeBirth: String
+  role: Int
+  username: String
 }
 
 type UserEntity {
@@ -53,6 +85,11 @@ type UserEntity {
   role: Int!
   updatedAt: DateTime!
   username: String!
+}
+
+type UserResponse {
+  item: UserEntity
+  message: String!
 }
 
 type UsersPaginated {
