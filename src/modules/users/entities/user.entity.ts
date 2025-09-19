@@ -71,3 +71,12 @@ export class UsersPaginatedResponse {
   @Field(() => UsersPaginated)
   data: UsersPaginated;
 }
+
+@ObjectType()
+export class UserResponse {
+  @Field()
+  message: string;
+
+  @Field(() => UserEntity, { nullable: true })
+  item?: UserEntity;
+}
