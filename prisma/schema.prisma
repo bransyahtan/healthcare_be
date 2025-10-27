@@ -65,63 +65,24 @@ model HospitalData {
   createdAt      DateTime               @default(now())
   updatedAt      DateTime               @updatedAt
   deletedAt      DateTime?
-
-  // relations
-  hospitalFacilities     HospitalFacility[]
-  hospitalSpecializations HospitalSpecialization[]
-  specializations        Specialization[]
 }
 
-model Facility {
+model HospitalFacility {
   id        Int       @id @default(autoincrement())
   name      String
   slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
-
-  hospitalFacilities HospitalFacility[]
 }
 
-model Specialization {
+model HospitalSpecialization {
   id         Int       @id @default(autoincrement())
-  hospitalId Int?
   name       String
   slug       String   @unique
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   deletedAt  DateTime?
-
-  hospital   HospitalData? @relation(fields: [hospitalId], references: [id])
-  hospitalSpecializations HospitalSpecialization[]
-}
-
-model HospitalFacility {
-  id         Int       @id @default(autoincrement())
-  hospitalId Int
-  facilityId Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  deletedAt  DateTime?
-
-  hospital   HospitalData @relation(fields: [hospitalId], references: [id])
-  facility   Facility     @relation(fields: [facilityId], references: [id])
-
-  @@unique([hospitalId, facilityId])
-}
-
-model HospitalSpecialization {
-  id               Int       @id @default(autoincrement())
-  hospitalId       Int
-  specializationId Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  deletedAt        DateTime?
-
-  hospital         HospitalData   @relation(fields: [hospitalId], references: [id])
-  specialization   Specialization @relation(fields: [specializationId], references: [id])
-
-  @@unique([hospitalId, specializationId])
 }
 
 model ArticleCategory {
